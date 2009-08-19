@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>
+      Curl::Multi
+  </title>
+  <script src="javascripts/rounded_corners_lite.inc.js" type="text/javascript"></script>
+<style>
+
+</style>
+  <script type="text/javascript">
+    window.onload = function() {
+      settings = {
+          tl: { radius: 10 },
+          tr: { radius: 10 },
+          bl: { radius: 10 },
+          br: { radius: 10 },
+          antiAlias: true,
+          autoPad: true,
+          validTags: ["div"]
+      }
+      var versionBox = new curvyCorners(settings, document.getElementById("version"));
+      versionBox.applyCornersToAll();
+    }
+  </script>
+</head>
+<body>
+<div id="main">
+
+    <h1>Curl::Multi</h1>
+    <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/curl-multi"; return false'>
+      <p>Get Version</p>
+      <a href="http://rubyforge.org/projects/curl-multi" class="numbers">0.2</a>
+    </div>
+    <h1>&#x2192; ‘curl-multi’</h1>
+
+
+	<h2>What</h2>
+
+
+	<p><code class='syntax'><span class="constant">Curl</span><span class="punct">::</span><span class="constant">Multi</span></code> provides very high-level Ruby bindings
+for the libcurl multi interface.</p>
+
+
+	<p>It was originally written for use by
+<a href="http://www.causesonfacebook.com/">www.causesonfacebook.com</a> to process many
+concurrent http requests. <code class='syntax'><span class="constant">Curl</span><span class="punct">::</span><span class="constant">Multi</span></code> is written and
+maintanied by Kristján Pétursson and Keith Rarick.</p>
+
+
+	<h2>Installing</h2>
+
+
+	<p><pre class='syntax'>$ sudo gem install curl-multi</pre></p>
+
+
+	<h2>The basics</h2>
+
+
+	<p><pre class='syntax'>
+<span class="ident">require</span> <span class="punct">'</span><span class="string">curl-multi</span><span class="punct">'</span>
+<span class="ident">curl</span> <span class="punct">=</span> <span class="constant">Curl</span><span class="punct">::</span><span class="constant">Multi</span><span class="punct">.</span><span class="ident">new</span>
+<span class="ident">on_success</span> <span class="punct">=</span> <span class="ident">lambda</span> <span class="keyword">do</span> <span class="punct">|</span><span class="ident">body</span><span class="punct">|</span>
+  <span class="ident">puts</span> <span class="ident">body</span>
+<span class="keyword">end</span>
+<span class="ident">on_failure</span> <span class="punct">=</span> <span class="ident">lambda</span> <span class="keyword">do</span> <span class="punct">|</span><span class="ident">ex</span><span class="punct">|</span>
+  <span class="ident">puts</span> <span class="punct">'</span><span class="string">Failure.</span><span class="punct">'</span>
+  <span class="ident">puts</span> <span class="ident">ex</span>
+<span class="keyword">end</span>
+<span class="ident">curl</span><span class="punct">.</span><span class="ident">get</span><span class="punct">('</span><span class="string">http://www.example.org/</span><span class="punct">',</span> <span class="ident">on_success</span><span class="punct">,</span> <span class="ident">on_failure</span><span class="punct">)</span>
+<span class="ident">curl</span><span class="punct">.</span><span class="ident">select</span><span class="punct">([],</span> <span class="punct">[])</span> <span class="keyword">while</span> <span class="ident">curl</span><span class="punct">.</span><span class="ident">size</span> <span class="punct">&gt;</span> <span class="number">0</span>
+</pre></p>
+
+
+	<p>There&#8217;s not much more to the interface. A good thing, too, because we don&#8217;t
+really have any documentation yet. Patches are most welcome!</p>
+
+
+	<h2>Forum</h2>
+
+
+	<p><a href="http://groups.google.com/group/ruby-curl-multi">http://groups.google.com/group/ruby-curl-multi</a></p>
+
+
+	<h2>How to submit patches</h2>
+
+
+	<p>1. Download the latest release from
+<a href="http://rubyforge.com/projects/curl-multi/">http://rubyforge.com/projects/curl-multi/</a>.</p>
+
+
+	<p>2. Make your change.</p>
+
+
+	<p>3. Send mail to <a href="mailto:kr@essembly.com">Keith</a> describing your changes.</p>
+
+
+	<p>Soon we&#8217;ll set up a public <a href="http://git.or.cz/">git</a> repository. That&#8217;ll make
+submitting patches much easier.</p>
+
+
+	<h2>License</h2>
+
+
+	<p>This code is free to use under the terms of the <span class="caps">GPL</span> version 3.</p>
+
+
+	<h2>Contact</h2>
+
+
+	<p>Comments are welcome. Send mail to <a href="mailto:kr@essembly.com">Keith Rarick</a> or
+discuss things in the <a href="http://groups.google.com/group/ruby-curl-multi">forum</a>.</p>
+
+
+	<p>Also see <a href="http://xph.us/software/">Keith&#8217;s web page</a> for curl-multi information
+and other software.</p>
+    <p class="coda">
+      <a href="mailto:kr@essembly.com">Keith Rarick</a>, 19th February 2008<br>
+      Theme extended from <a href="http://rb2js.rubyforge.org/">Paul Battley</a>
+    </p>
+</div>
+
+<!-- insert site tracking codes here, like Google Urchin -->
+
+</body>
+</html>
