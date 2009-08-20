@@ -376,7 +376,7 @@ module Curl
             rb_funcall(rb_req, id_done, 2, INT2FIX(msg->data.result),
                                            INT2FIX(status));
 
-            r = curl_multi_remove_handle(DATA_PTR(self), easy_handle);
+            r = curl_multi_remove_handle(multi_handle, easy_handle);
             CHECKN(r);
 
             /* Free the handle */
