@@ -23,13 +23,17 @@ require 'curb'
 
 module Curl
   class Error < RuntimeError
+    attr_accessor :code
     def initialize(code)
+      self.code = code
       super("Curl error #{code}")
     end
   end
 
   class HTTPError < RuntimeError
+    attr_accessor :status
     def initialize(status)
+      self.status = status
       super("Curl HTTP error #{status}")
     end
   end
@@ -85,7 +89,10 @@ module Curl
   class Multi
     def size() @handles.size end
 
-    def inspect() '{Curl::Multi' + @handles.map{|h| ' '+h.url}.join + '}' end
+    def inspect()
+      '{Curl::Multi' + @handles.map{|h| ' '+h.url}.join + '}'
+    end
+
     alias_method :to_s, :inspect
 
     def get(url, success, failure=lambda{})
@@ -101,7 +108,11 @@ module Curl
         ready_rfds, ready_wfds = c_select(rfds.map{|s|s.fileno},
                                           wfds.map{|s|s.fileno})
         work() # Curl may or may not have work to do, but we can't tell.
+
+        # If we find any ready file descriptors, return them
         return ready_rfds, ready_wfds if ready_rfds.any? or ready_wfds.any?
+        # If our original descriptor lists were empty, return after
+        # one loop
         return [], [] if rfds == [] and wfds == []
       end
     end
@@ -135,7 +146,9 @@ module Curl
 
     # Add a URL to the queue of items to fetch
     def add(url, body, success, failure=lambda{})
-      while (h = add_to_curl(Req.new(url, success, failure), url, body)) == nil
+      while true
+        h = add_to_curl(Req.new(url, success, failure), url, body)
+        break if h
         select([], [])
       end
       @handles << h
@@ -240,7 +253,7 @@ module Curl
           /* Pass it the URL */
           curl_easy_setopt(easy_handle, CURLOPT_URL, c_url);
 
-          /* GET or POST? */
+          /* if POST */
           if (body != Qnil) {
             char *c_body = StringValuePtr(body);
             uint body_sz = RSTRING(body)->len;
@@ -280,9 +293,11 @@ module Curl
           FD_ZERO(&wfds);
           FD_ZERO(&efds);
 
-          /* Put curl's fds into the sets. */
+          /* Put curl's fds into the sets.  Also sets n to the *
+           * highest fd */
           cr = curl_multi_fdset(multi_handle, &rfds, &wfds, &efds, &n);
           CHECKN(cr);
+
 
           /* Put the given fds into the sets. */
           for (i = 0; i < RARRAY(rfda)->len; i++) {
