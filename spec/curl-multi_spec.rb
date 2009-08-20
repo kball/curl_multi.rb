@@ -39,6 +39,23 @@ describe 'Curl::Multi with a single request' do
     Process.kill('KILL', @server_process)
   end
 
+  it 'Adds gets to its handles' do
+    initial = @curl_multi.size
+    @curl_multi.get("#{@server}/ok", lambda {}, lambda {})
+    @curl_multi.size.should eql(initial + 1)
+  end
+
+  it 'Adds posts to its handles' do
+    initial = @curl_multi.size
+    @curl_multi.post("#{@server}/flush", {}, lambda {}, lambda {})
+    @curl_multi.size.should eql(initial + 1)
+  end
+
+  it "Should call select if you try to add more than 501 handles" do
+    @curl_multi.stubs(:size).returns(501).then.returns(0)
+    @curl_multi.expects(:select).with([], [])
+    @curl_multi.add("#{@server}/ok", nil, lambda{})
+  end
   it "Should be able to get one ok" do
     success = lambda do |body|
       body.should eql('ok')
