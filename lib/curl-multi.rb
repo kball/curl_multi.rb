@@ -147,9 +147,12 @@ module Curl
     # Add a URL to the queue of items to fetch
     def add(url, body, success, failure=lambda{})
       while true
-        h = add_to_curl(Req.new(url, success, failure), url, body)
-        break if h
-        select([], [])
+        if self.size > 500
+          select([], [])
+        else
+          h = add_to_curl(Req.new(url, success, failure), url, body)
+          break if h
+        end
       end
       @handles << h
       work()
@@ -243,9 +246,6 @@ module Curl
           CURLMcode r;
           GET_MULTI_HANDLE(multi_handle);
 
-          /* We start getting errors if we have too many open connections at
-          once, so make a hard limit. */
-          if (FIX2INT(rb_funcall(self, id_size, 0)) > 500) return Qnil;
 
           CURL *easy_handle = curl_easy_init();
           char *c_url = StringValuePtr(url);
