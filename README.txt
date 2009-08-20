@@ -1,5 +1,5 @@
 curl-multi - Ruby bindings for the libcurl multi interface
-Copyright (C) 2007 Philotic, Inc.
+Copyright (C) 2007, 2008, 2009 Philotic, Inc.
 
 See http://curl-multi.rubyforge.net/ for instructions.
 
