@@ -121,7 +121,7 @@ module Curl
     # read as much data as is ready and write as much data as we have buffer
     # space for. If any complete responses arrive, call their handlers.
     def work
-      perform()
+      curl_multi_c_perform()
 
       done, @handles = @handles.partition{|h| h.done?}
       failed, done = done.partition{|h| h.failed?}
@@ -340,7 +340,7 @@ module Curl
 
       # Basically just a wrapper for curl_multi_perform().
       builder.c <<-end
-        void perform() {
+        void curl_multi_c_perform() {
           CURLMsg *msg;
           CURLcode er;
           CURLMcode r;
